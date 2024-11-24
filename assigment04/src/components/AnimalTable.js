@@ -1,9 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {animals} from '../assets/data/AnimalsDb';
 import '../assets/css/compo.css'
 function AnimalTable(props) {
+
+    const[result,setResult]=useState('');
+    const[randomAnimal,setRandomAnimal]=useState('');
+
+    const hadleAnimalClick=(selectedAnimal)=>{
+        if(selectedAnimal === randomAnimal){
+            setResult("WIN");
+        }else{
+            setResult("LOSE");
+        }
+    };
   return (
-    
+
         
     <div className='gameContainer'>
         <table className='game-table'>
