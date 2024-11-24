@@ -1,51 +1,65 @@
 import React, { useEffect, useState } from 'react'
 import {animals} from '../assets/data/AnimalsDb';
 import '../assets/css/compo.css'
+
+
 function AnimalTable(props) {
 
-    const[result,setResult]=useState('');
-    const[randomAnimal,setRandomAnimal]=useState('');
+    const [randomAnimal,setRandomAnimal]= useState(null);
+    const [result,setResult]= useState('');
 
-    const handleAnimalClick=(selectedAnimal)=>{
-        if(selectedAnimal === randomAnimal){
-            setResult("WIN");
-        }else{
-            setResult("LOSE");
-        }
+    useEffect(() => {
+        generateRandomAnimal();
+    }, []);
+    
+    const generateRandomAnimal = () => {
+        const randomIndex = Math.floor(Math.random() * 10)+1; 
+        setRandomAnimal(animals[randomIndex]);
+        setResult(''); 
     };
 
-    useEffect(()=>{
-        const randomIndex=Math.floor(Math.random()*10)+1;
-        setRandomAnimal(animals[randomIndex]);
-    })
 
+    const handleAnimalClick=(selectedAnimal)=>{
+        if(selectedAnimal === randomAnimal.name){
+            setResult('WIN');
+        }else{
+            setResult('LOSE');
+        }
 
+        setTimeout(() => {
+            generateRandomAnimal(); 
+          }, 1000);
+    };
+
+    if (!randomAnimal) {
+        return <div className="loading">Loading...</div>;
+    }
+
+    
+      
   return (
-
-        
     <div className='gameContainer'>
         <table className='game-table'>
             <thead>
                 <tr >
-                    
-                    <th colspan="3">Animal Matching Game</th>
+                    <th colSpan="3"><h2>ANIMAL MATCHING GAME</h2></th>
                 </tr>
                 <tr>
-                    <th >Result</th>
-                    <th>Animal Name</th>
-                    <th>Select the Animal</th>
+                    <th><h3>Result</h3></th>
+                    <th><h3>Animal Name</h3></th>
+                    <th><h3>Select the Animal</h3></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                <td className='result-col'>
-                <h2>Result</h2></td>
-                <td className='animalname-col'>
-                    <h2>{randomAnimal.toUpperCase()}</h2></td>
-                
-                    <td className='animalgrid-col'>
+                    <td className='result-col' width="10%">
+                    <h2>{result}</h2></td>
+
+                    <td className='animalname-col' width="20%">
+                    <h2>{randomAnimal.name.toUpperCase()}</h2></td>
+                    <td className='animalgrid-col' width="70%">
                         <div>
-                        <div className='animalgrid'>
+                            <div className='animalgrid'>
                                 {animals.map((animal)=>(
                                     <div key={animal.name} className='animalgrid-item' onClick={()=>handleAnimalClick(animal.name)}>
                                         <img src={require(`../assets/img/${animal.img}`)} alt={animal.name} className='animal-image'/>
@@ -55,10 +69,11 @@ function AnimalTable(props) {
                         </div>
                     </td>
                 </tr>
+
             </tbody>
         </table>
     </div>
-    
-  )
+)
 }
+
 export default AnimalTable
